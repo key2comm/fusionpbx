@@ -9,7 +9,9 @@ reboot_phones.py will run through a list of vendors to try to get the phone to r
 
 <hr>
 
-reboot_one_brand.py will just reboot one brand of phones.
+reboot_one_brand.py will just reboot one brand of phones. Update line 20 vendors = ['yealink'] and input the vendor you want to reboot. This script is not limited to just one vendor. You can add two if you wish. Example would be if you wanted Yealink and Grandstream Phones. vendors = ['yealink', 'grandstream']
+
+<hr>
 
 Then you can add this into your crontab. You do not need root access on your system to run this.
 
