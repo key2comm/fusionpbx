@@ -1,19 +1,49 @@
-#Make sure that you have python3-git installed on your Server debian apt-get install python3-git
+#Make sure that you have python3-git installed on your Server debian apt-get install python3-git,  apt-get install python3-pandas and apt-get install python3-numpy
 import os
 import shutil
 import time
 import csv
+import pandas as pd
+import numpy as np
+import json
 
 temp_reboot_file = "/tmp/reboot.csv"
+json_reboot_file = "/tmp/reboot.json"
 
-check_file_tmp = os.path.isfile('temp_reboot_file')
+check_file_tmp = os.path.isfile(temp_reboot_file)
 if check_file_tmp == True:
 	os.remove(temp_reboot_file)
 time.sleep(5)
 print("Checking all the Phone Registrations, and exporting to a CSV file in /tmp/reboot.csv")
 os.system('fs_cli -x "show registrations" > /tmp/reboot.csv')
 
-phone_brand = ["yealink", "grandstream", "cisco", "polycom"]
+# Vendors is an array where it will add the vendor at the end of the fs_cli. If you have different brands of phones
+# this will solve making multiple scripts. This will do them all. If you are using a vendor that is not listed,
+# you can add them into the vendors array as 'vendor' then save.
+vendors = ['yealink', 'grandstream', 'cisco', 'polycom', 'snom']
 
-#with open('/tmp/reboot.csv', mode='w') as reg_phones:
-#	csvRegPhones = csv.reader(temp_reboot_file)
+with open(temp_reboot_file, mode='r') as file:
+    csv_reader = csv.reader(file)
+    
+    # Skip the header row and remove the last three rows
+    rows_to_process = list(csv_reader)[1:-3] 
+    
+    for row in rows_to_process:
+        # Check if the row has at least two columns
+        if len(row) >= 2:
+            # Extract the first two columns
+            reg_user = row[0]
+            realm = row[1]
+            
+            # Iterate through the list of vendors
+            for vendor in vendors:
+                # Construct the command string
+                command = f'eval \'fs_cli -x "luarun app.lua event_notify internal reboot {reg_user}@{realm} {vendor}"\''
+                
+                # Execute the command using os.system
+                os.system(command)
+                
+                # Optionally, print confirmation or any other output
+                print(f"Executed command for reg_user: {reg_user}, realm: {realm}, vendor: {vendor}")
+        else:
+            print("Row does not have enough columns:", row)
