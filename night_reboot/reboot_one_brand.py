@@ -17,7 +17,7 @@ os.system('fs_cli -x "show registrations" > /tmp/reboot.csv')
 # Vendors is an array where it will add the vendor at the end of the fs_cli. If you have different brands of phones
 # this will solve making multiple scripts. This will do them all. If you are using a vendor that is not listed,
 # you can add them into the vendors array as 'vendor' then save.
-vendors = ['yealink', 'grandstream', 'cisco', 'polycom', 'snom']
+vendors = ['yealink']
 
 with open(temp_reboot_file, mode='r') as file:
     csv_reader = csv.reader(file)
