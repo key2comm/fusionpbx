@@ -5,7 +5,6 @@ import time
 import csv
 
 temp_reboot_file = "/tmp/reboot.csv"
-json_reboot_file = "/tmp/reboot.json"
 
 check_file_tmp = os.path.isfile(temp_reboot_file)
 if check_file_tmp == True:
