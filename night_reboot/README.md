@@ -4,7 +4,10 @@ This file is built off the file that is already installed on the system located 
 
 You have two options for the file. You only need one.
 
-reboot_phones.py will run through a list of vendors to try to get the phone to reboot. This is good if you have multiple vendor phones, snom, yealink etc. This one will try to reboot them all at once.  This might use a little more CPU if you have a lot of phones. If there are 5 vendors, it will try to reboot the phone 5 times with each vendor.
+<hr>
+reboot_phones.py will run through a list of vendors to try to get the phone to reboot. This is good if you have multiple vendor phones, snom, yealink etc. This one will try to reboot them all at once.  This might use a little more CPU if you have a lot of phones. If there are 5 vendors, it will try to reboot the extension five times with each vendor.
+
+<hr>
 
 reboot_one_brand.py will just reboot one brand of phones.
 
