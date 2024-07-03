@@ -1,11 +1,9 @@
-#Make sure that you have python3-git installed on your Server debian apt-get install python3-git,  apt-get install python3-pandas and apt-get install python3-numpy
+#Make sure that you have python3-git installed on your Server debian apt-get install python3-git,  apt-get install python3-pandas
 import os
 import shutil
 import time
 import csv
 import pandas as pd
-import numpy as np
-import json
 
 temp_reboot_file = "/tmp/reboot.csv"
 json_reboot_file = "/tmp/reboot.json"
