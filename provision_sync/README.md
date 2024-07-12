@@ -1,7 +1,22 @@
-This file will connect to the FusionPBX Github repository located at https://github.com/fusionpbx/fusionpbx
+This file is built off the file that is already installed on the system located at  /usr/src/fusionpbx-install.sh/ubuntu/resources/reboot.sh
 
-Download the repostory to your server. Then it will copy everything from /fusion/resources/templates/provision and override the ones you have on your server. 
+**All credit goes to the FusionPBX Team. I'm just modifying the script with some other options in it.
 
-We do a lot of on premise servers and we always need to download certain provision templates that are not included when we first do a build so we designed a script to download and sync in one simple script.
+You have two options for the file. You only need one.
 
-**Note it will not sync, it will copy and replace your current files located in /var/www/fusionpbx/resources/templates/provision/. If you have any custom configs you should back them up.
+<hr>
+reboot_phones.py will run through a list of vendors to get the phone to reboot. This is good if you have multiple vendor phones, snom, yealink etc. This one will try to reboot them all at once.  This might use a little more CPU if you have a lot of phones. If there are 5 vendors, it will try to reboot the extension five times with each vendor.
+
+<hr>
+
+reboot_one_brand.py will just reboot one brand of phones. Update line 20 vendors = ['yealink'] and input the vendor you want to reboot. This script is not limited to just one vendor. You can add two if you wish. An example would be if you wanted Yealink and Grandstream Phones. vendors = ['yealink', 'grandstream']
+
+<hr>
+
+Then you can add this to your crontab. You do not need root access to your system to run this.
+
+An example of crontab is assuming your user login is Ubuntu. Please change it to whatever your home directory is for your user.
+crontab -e #this will open the crontab editor
+@midnight python3 /home/ubuntu/reboot_phones.py
+
+Then press ctrl + o to save, then ctrl + x to exit.
