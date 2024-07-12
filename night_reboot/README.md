@@ -13,10 +13,10 @@ reboot_one_brand.py will just reboot one brand of phones. Update line 20 vendors
 
 <hr>
 
-Then you can add this into your crontab. You do not need root access on your system to run this.
+Then you can add this to your crontab. You do not need root access to your system to run this.
 
-Example of crontab assuming your user login is ubuntu. Please change to wahtever your home directory is for your user.
+An example of crontab is assuming your user login is ubuntu. Please change it to whatever your home directory is for your user.
 crontab -e #this will open the crontab editor
 @midnight python3 /home/ubuntu/reboot_phones.py
 
-Then press ctrl + o to save then ctrl + x to exit
+Then press ctrl + o to save, then ctrl + x to exit.
