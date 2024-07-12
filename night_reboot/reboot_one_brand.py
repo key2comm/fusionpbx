@@ -43,3 +43,5 @@ with open(temp_reboot_file, mode='r') as file:
                 print(f"Executed command for reg_user: {reg_user}, realm: {realm}, vendor: {vendor}")
         else:
             print("Something went wrong:", row)
+print("Deleting the /tmp/reboot.csv file")
+os.remove('/tmp/reboot.csv')
