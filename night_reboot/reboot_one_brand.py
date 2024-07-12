@@ -37,6 +37,7 @@ with open(temp_reboot_file, mode='r') as file:
                 
                 # Execute the command using os.system
                 os.system(command)
+                time.sleep(3)
                 
                 # Optionally, print confirmation or any other output
                 print(f"Executed command for reg_user: {reg_user}, realm: {realm}, vendor: {vendor}")
