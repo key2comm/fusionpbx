@@ -1,4 +1,3 @@
-#Make sure that you have python3-git installed on your Server debian apt-get install python3-git
 import os
 import shutil
 import time
