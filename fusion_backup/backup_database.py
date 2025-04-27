@@ -1,68 +1,91 @@
-import psycopg2
 # If you have pip installed type pip install psycopg2
 # If you are not using pip you can install via apt install python3-psycopg2
-import re
-import subprocess
 import os
+import re
+import psycopg2
+from psycopg2 import sql
+from datetime import datetime
 
-# Define the database connection details as variables
-DB_HOST = '127.0.0.1'        # Host
-DB_USER = 'fusionpbx'        # Username
-DB_NAME = 'fusionpbx'        # Database name
-DB_PORT = 5432               # Port
+# Database connection details
+db_host = "localhost"  # Change as necessary
+db_port = 5432         # Change as necessary
+db_name = "fusionpbx"  # Change as necessary
 
-# Define the path to the config file
-config_file_path = '/etc/fusiobpbx/config.conf'
+# Path to the config file
+config_file_path = "/etc/fusionpbx/config.conf"
 
-# Function to get the database password from the config file
-def get_database_password(config_file_path):
+# Function to get the password from the config file
+def get_db_password(config_file_path):
+    password = None
     try:
         with open(config_file_path, 'r') as file:
-            # Read all lines from the file
-            lines = file.readlines()
-            
-            # Iterate through each line and search for the pattern 'database.0.password'
-            for line in lines:
-                if line.strip().startswith('database.0.password'):
-                    # Use regex to extract the password after '='
-                    match = re.search(r'=\s*(\S+)', line)
+            for line in file:
+                # Look for the line containing the password
+                if line.startswith("database.0.password"):
+                    # Extract the password using regex
+                    match = re.search(r"database\.0\.password\s*=\s*(\S+)", line)
                     if match:
-                        return match.group(1)
-            # If the password is not found
-            return None
+                        password = match.group(1)
+                        break
+    except FileNotFoundError:
+        print(f"Error: The file {config_file_path} does not exist.")
     except Exception as e:
         print(f"An error occurred: {e}")
-        return None
+    
+    return password
 
 # Function to test the database connection
-def test_database_connection(username, password, host, port):
+def test_db_connection(db_host, db_port, db_name, db_password):
     try:
-        # Create a connection to the PostgreSQL database
-        connection = psycopg2.connect(
-            dbname=DB_NAME,  
-            user=DB_USER,
-            password=password,
-            host=DB_HOST,
-            port=DB_PORT
+        # Connect to PostgreSQL
+        conn = psycopg2.connect(
+            dbname=db_name,
+            user="fusionpbx_user",  # Adjust with your actual username
+            password=db_password,
+            host=db_host,
+            port=db_port
         )
-        
-        # If the connection is successful, return True
-        print("Database connection successful.")
-        connection.close()  # Close the connection
-        return True
+        print("Connection successful.")
+        conn.close()
     except Exception as e:
-        # If connection fails, print the error
-        print(f"Database connection failed: {e}")
-        return False
+        print(f"Error connecting to the database: {e}")
 
-# Main logic
-password = get_database_password(config_file_path)
+# Function to export the database to a file
+def export_db_to_file(db_host, db_port, db_name, db_password, export_folder):
+    # Create the folder if it doesn't exist
+    if not os.path.exists(export_folder):
+        os.makedirs(export_folder)
 
-if password:
-    print("Database password found. Testing connection...")
-    if test_database_connection(DB_USER, password, DB_HOST, DB_PORT):
-        print("Connection test successful!")
+    # Create the backup file name based on the current date and time
+    backup_filename = f"{db_name}_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.sql"
+    backup_file_path = os.path.join(export_folder, backup_filename)
+
+    # Command to export the database
+    dump_command = f"pg_dump -h {db_host} -p {db_port} -U fusionpbx_user -F c -b -v -f {backup_file_path} {db_name}"
+
+    try:
+        # Run the pg_dump command
+        os.environ["PGPASSWORD"] = db_password
+        os.system(dump_command)
+        print(f"Database backup exported to {backup_file_path}")
+    except Exception as e:
+        print(f"Error exporting the database: {e}")
+
+# Main function
+def main():
+    # Get the password from the config file
+    db_password = get_db_password(config_file_path)
+    
+    if db_password:
+        # Test the database connection
+        test_db_connection(db_host, db_port, db_name, db_password)
+        
+        # Export the database
+        export_folder = "/home/debian/fusionbackup/"
+        export_db_to_file(db_host, db_port, db_name, db_password, export_folder)
     else:
-        print("Connection test failed.")
-else:
-    print("Password not found in the config file.")
+        print("Failed to retrieve the database password from the config file.")
+
+# Run the main function
+if __name__ == "__main__":
+    main()
