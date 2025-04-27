@@ -10,6 +10,7 @@ from datetime import datetime
 db_host = "localhost"  # Change as necessary
 db_port = 5432         # Change as necessary
 db_name = "fusionpbx"  # Change as necessary
+db_user = "fusionpbx"
 
 # Path to the config file
 config_file_path = "/etc/fusionpbx/config.conf"
@@ -40,7 +41,7 @@ def test_db_connection(db_host, db_port, db_name, db_password):
         # Connect to PostgreSQL
         conn = psycopg2.connect(
             dbname=db_name,
-            user="fusionpbx_user",  # Adjust with your actual username
+            user=db_user,  # Adjust with your actual username
             password=db_password,
             host=db_host,
             port=db_port
