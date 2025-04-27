@@ -9,7 +9,7 @@ from datetime import datetime
 
 backup_folder = "/home/debian/fusionbackup/"
 
-# Function to delete files older than 7 days
+# Function to delete files older than 7 days. Change the number to the number of days you wish to have.
 def delete_old_files(folder_path, days_old=7):
     current_time = time.time()
     cutoff_time = current_time - (days_old * 86400)  # 86400 seconds in a day
@@ -66,7 +66,7 @@ def test_db_connection(db_host, db_port, db_name, db_password):
         # Connect to PostgreSQL
         conn = psycopg2.connect(
             dbname=db_name,
-            user=db_user,  # Adjust with your actual username
+            user=db_user,
             password=db_password,
             host=db_host,
             port=db_port
