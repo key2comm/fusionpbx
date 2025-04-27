@@ -62,7 +62,7 @@ def export_db_to_file(db_host, db_port, db_name, db_password, export_folder):
     backup_file_path = os.path.join(export_folder, backup_filename)
 
     # Command to export the database
-    dump_command = f"pg_dump -h {db_host} -p {db_port} -U fusionpbx_user -F c -b -v -f {backup_file_path} {db_name}"
+    dump_command = f"pg_dump -h {db_host} -p {db_port} -U {db_user}-F c -b -v -f {backup_file_path} {db_name}"
 
     try:
         # Run the pg_dump command
