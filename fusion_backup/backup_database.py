@@ -7,6 +7,30 @@ import psycopg2
 from psycopg2 import sql
 from datetime import datetime
 
+backup_folder = "/home/debian/fusionbackup/"
+
+# Function to delete files older than 7 days
+def delete_old_files(folder_path, days_old=7):
+    current_time = time.time()
+    cutoff_time = current_time - (days_old * 86400)  # 86400 seconds in a day
+
+    try:
+        # Loop through all files in the folder
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            
+            # Check if it's a file and if it's older than the cutoff time
+            if os.path.isfile(file_path):
+                file_mod_time = os.path.getmtime(file_path)
+                
+                if file_mod_time < cutoff_time:
+                    # Delete the file if it is older than 7 days
+                    os.remove(file_path)
+                    print(f"Deleted old file: {filename}")
+                    
+    except Exception as e:
+        print(f"Error deleting old files: {e}")
+
 # Database connection details
 db_host = "localhost"  # Change as necessary
 db_port = 5432         # Change as necessary
@@ -53,10 +77,10 @@ def test_db_connection(db_host, db_port, db_name, db_password):
         print(f"Error connecting to the database: {e}")
 
 # Function to export the database to a file
-def export_db_to_file(db_host, db_port, db_name, db_password, export_folder):
+def export_db_to_file(db_host, db_port, db_name, db_password, backup_folder):
     # Create the folder if it doesn't exist
-    if not os.path.exists(export_folder):
-        os.makedirs(export_folder)
+    if not os.path.exists(backup_folder):
+        os.makedirs(backup_folder)
 
     # Create the backup file name based on the current date and time
     backup_filename = f"{db_name}_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.sql"
@@ -83,9 +107,9 @@ def main():
         test_db_connection(db_host, db_port, db_name, db_password)
         
         # Export the database
-        export_folder = "/home/debian/fusionbackup/"
-        os.makedirs(export_folder, exist_ok=True)
-        export_db_to_file(db_host, db_port, db_name, db_password, export_folder)
+        backup_folder = "/home/debian/fusionbackup/"
+        os.makedirs(backup_folder, exist_ok=True)
+        export_db_to_file(db_host, db_port, db_name, db_password, backup_folder)
     else:
         print("Failed to retrieve the database password from the config file.")
 
