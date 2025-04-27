@@ -1,5 +1,6 @@
 # If you have pip installed type pip install psycopg2
 # If you are not using pip you can install via apt install python3-psycopg2
+# You should not need to run this as sudo or root. It will read the config.conf file but not edit it.
 import os
 import re
 import psycopg2
