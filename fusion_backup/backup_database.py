@@ -84,7 +84,7 @@ def export_db_to_file(db_host, db_port, db_name, db_password, backup_folder):
 
     # Create the backup file name based on the current date and time
     backup_filename = f"{db_name}_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.sql"
-    backup_file_path = os.path.join(export_folder, backup_filename)
+    backup_file_path = os.path.join(backup_folder, backup_filename)
 
     # Command to export the database
     dump_command = f"pg_dump -h {db_host} -p {db_port} -U {db_user} -F c -b -v -f {backup_file_path} {db_name}"
@@ -107,7 +107,6 @@ def main():
         test_db_connection(db_host, db_port, db_name, db_password)
         
         # Export the database
-        backup_folder = "/home/debian/fusionbackup/"
         os.makedirs(backup_folder, exist_ok=True)
         export_db_to_file(db_host, db_port, db_name, db_password, backup_folder)
     else:
