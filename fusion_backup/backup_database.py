@@ -83,7 +83,7 @@ def main():
         
         # Export the database
         export_folder = "/home/debian/fusionbackup/"
-        os.makedirs(folder_path, exist_ok=True)
+        os.makedirs(export_folder, exist_ok=True)
         export_db_to_file(db_host, db_port, db_name, db_password, export_folder)
     else:
         print("Failed to retrieve the database password from the config file.")
