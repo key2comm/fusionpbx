@@ -12,7 +12,7 @@ DB_NAME = 'fusionpbx'        # Database name
 DB_PORT = 5432               # Port
 
 # Define the path to the config file
-config_file_path = '/etc/fusiobpbx/config.php'
+config_file_path = '/etc/fusiobpbx/config.conf'
 
 # Function to get the database password from the config file
 def get_database_password(config_file_path):
